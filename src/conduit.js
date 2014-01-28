@@ -14,7 +14,7 @@
 
     return function( options ) {
         if ( typeof options.target !== "function" ) {
-            throw new Error( "You can can only call conduit.make on functions." );
+            throw new Error( "You can only make functions into Conduits." );
         }
         var _steps = {
             pre : options.pre  || [],
