@@ -1,7 +1,7 @@
 {
     "name": "conduitjs",
     "description": "Give any method a pre/post invocation pipeline....",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "homepage": "http://github.com/ifandelse/ConduitJS",
     "repository": {
         "type": "git",
@@ -13,12 +13,20 @@
             "name": "Jim Cowart",
             "email": "WhyNotJustComment@OnMyBlog.com",
             "url": "http://freshbrewedcode.com/jimcowart"
+        },
+        {
+            "name": "TJ VanToll",
+            "email": "WhyNotJustComment@OnMyBlog.com",
+            "url": "http://tjvantoll.com/"
         }
     ],
     "keywords": [
         "strategy",
         "pipeline",
-        "AOP"
+        "AOP",
+        "proxy",
+        "decorator",
+        "step"
     ],
     "bugs": {
         "email": "PleaseJustUseTheIssuesPage@github.com",

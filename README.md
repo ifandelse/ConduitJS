@@ -1,6 +1,6 @@
 #ConduitJS
 
-ConduitJS can be used to give your methods a pre- and post-invocation pipeline. Think of it as targeted AOP for JavaScript methods. Need the ability to execute behavior just before or after a  method is invoked? Want to apply a predicate that determines if the method should actually fire? You can use ConduitJS to make that happen.
+ConduitJS can be used to give your methods a pre- and post-invocation pipeline. You can think of it as targeted [AOP](http://en.wikipedia.org/wiki/Aspect-oriented_programming) for JavaScript methods or the [Decorator](http://en.wikipedia.org/wiki/Decorator_pattern) pattern used to target methods specifically. Need the ability to execute behavior just before or after a  method is invoked? Want to apply a predicate that determines if the method should actually fire? You can use ConduitJS to make that happen.
 
 ##Example Usage
 ###Making a method a Conduit:
@@ -98,7 +98,18 @@ obj.doStuff(1);
   Pre-invocation step. We can see the value is: 1
   Pre-invocation predicate. I will halt execution 
 */
+```
 
+###Steps can be Asynchronous
+
+```javascript
+obj.doStuff.after(function(next, someValue) {
+	setTimeout(function() {
+		console.log("Post-invocation step. We can see the value is: " + someValue);
+	    next(someValue);
+	}, 0);
+}, { phase: "post" });
+obj.doStuff(1);
 ```
 
 ##License

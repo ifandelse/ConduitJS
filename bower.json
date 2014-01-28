@@ -1,12 +1,15 @@
 {
   "name": "conduitjs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Give any method a pipeline....",
   "homepage": "https://github.com/ifandelse/ConduitJS",
   "keywords": [
-    "pipeline",
-    "strategy",
-    "AOP"
+      "strategy",
+      "pipeline",
+      "AOP",
+      "proxy",
+      "decorator",
+      "step"
   ],
   "author": "Jim Cowart <jim@ifandelse.com>",
   "repository": {
