@@ -11,7 +11,6 @@
         root.Conduit = factory( root );
     }
 }( this, function( global, undefined ) {
-
     return function( options ) {
         if ( typeof options.target !== "function" ) {
             throw new Error( "You can only make functions into Conduits." );
@@ -49,10 +48,6 @@
                 }
             };
             next.apply( this, arguments );
-        };
-        conduit.target = options.target;
-        conduit.context = function( ctx ) {
-            _context = ctx;
         };
         conduit.steps = function() {
             return _steps.all;

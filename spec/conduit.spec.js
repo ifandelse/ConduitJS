@@ -10,16 +10,11 @@
                     cb( "Hi, " + this.name + " - " + msg );
                 }
             };
-            var oldMethod;
             before( function() {
-                oldMethod = obj.doStuff;
                 obj.doStuff = new Conduit( {
                     target   : obj.doStuff,
                     context  : obj
                 } );
-            } );
-            it( "should preserve old method on target property", function() {
-                expect( obj.doStuff.target ).to.be( oldMethod );
             } );
             it( "should return the expected value", function() {
                 obj.doStuff( "here's your msg...", function( msg ) {
@@ -50,9 +45,6 @@
             } );
             it( "should replace the method", function() {
                 expect( obj.doStuff ).to.not.be( oldMethod );
-            } );
-            it( "should be able to see original target on strategy instance", function() {
-                expect( obj.doStuff.target ).to.be( oldMethod );
             } );
             it( "should show a strategy in the steps array (along with target method)", function() {
                 expect( obj.doStuff.steps().length ).to.be( 2 );
@@ -90,9 +82,6 @@
             it( "should replace the method", function() {
                 expect( obj.doStuff ).to.not.be( oldMethod );
             } );
-            it( "should be able to see original target on strategy instance", function() {
-                expect( obj.doStuff.target ).to.be( oldMethod );
-            } );
             it( "should NOT show a strategy in the array", function() {
                 expect( obj.doStuff.steps().length ).to.be( 0 );
             } );
@@ -129,9 +118,6 @@
             } );
             it( "should replace the method", function() {
                 expect( obj.doStuff ).to.not.be( oldMethod );
-            } );
-            it( "should be able to see original target on strategy instance", function() {
-                expect( obj.doStuff.target ).to.be( oldMethod );
             } );
             it( "should show a strategy in the steps array along with target", function() {
                 expect( obj.doStuff.steps().length ).to.be( 2 );
