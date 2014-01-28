@@ -22,7 +22,7 @@
                 } );
             } );
         } );
-        describe( "with steps in use", function() {
+        describe( "with 'before' steps in use", function() {
             var obj = {
                 name    : "Jimbabwe",
                 doStuff : function( msg, cb ) {
@@ -36,7 +36,7 @@
                     target   : obj.doStuff,
                     context  : obj
                 });
-                obj.doStuff.addStep( {
+                obj.doStuff.before( {
                     name : "test1",
                     fn   : function( next, msg ) {
                         next( "Yo dawg..." + msg );
@@ -57,6 +57,81 @@
                 } );
             } );
         } );
+        describe( "with 'after' steps in use", function() {
+            var results = [];
+            var obj = {
+                name    : "Jimbabwe",
+                doStuff : function() {
+                    results.push( "original method invoked" );
+                }
+            };
+            var oldMethod;
+            before( function() {
+                oldMethod = obj.doStuff;
+                obj.doStuff = new Conduit( {
+                    target   : obj.doStuff,
+                    context  : obj
+                });
+                obj.doStuff.after( {
+                    fn   : function( next, msg ) {
+                        results.push("after step invoked");
+                        next();
+                    }
+                });
+            } );
+            it( "should replace the method", function() {
+                expect( obj.doStuff ).to.not.be( oldMethod );
+            } );
+            it( "should show a step in the steps array (along with target method)", function() {
+                expect( obj.doStuff.steps().length ).to.be( 2 );
+            } );
+            it( "should execute the methods in the expected order", function() {
+                obj.doStuff();
+                expect( results[0] ).to.be( "original method invoked" );
+                expect( results[1] ).to.be( "after step invoked" );
+            } );
+        } );
+        describe( "with 'before' and 'after' steps in use", function() {
+            var results = [];
+            var obj = {
+                name    : "Jimbabwe",
+                doStuff : function() {
+                    results.push( "original method invoked" );
+                }
+            };
+            var oldMethod;
+            before( function() {
+                oldMethod = obj.doStuff;
+                obj.doStuff = new Conduit( {
+                    target   : obj.doStuff,
+                    context  : obj
+                });
+                obj.doStuff.before( {
+                    fn   : function( next, msg ) {
+                        results.push("before step invoked");
+                        next();
+                    }
+                });
+                obj.doStuff.after( {
+                    fn   : function( next, msg ) {
+                        results.push("after step invoked");
+                        next();
+                    }
+                });
+            } );
+            it( "should replace the method", function() {
+                expect( obj.doStuff ).to.not.be( oldMethod );
+            } );
+            it( "should show two steps in the steps array (along with target method)", function() {
+                expect( obj.doStuff.steps().length ).to.be( 3 );
+            } );
+            it( "should execute the methods in the expected order", function() {
+                obj.doStuff();
+                expect( results[0] ).to.be( "before step invoked" );
+                expect( results[1] ).to.be( "original method invoked" );
+                expect( results[2] ).to.be( "after step invoked" );
+            } );
+        } );
         describe( "when clearing steps", function() {
             var obj = {
                 name    : "Jimbabwe",
@@ -71,7 +146,7 @@
                     target  : obj.doStuff,
                     context : obj
                 } );
-                obj.doStuff.addStep( {
+                obj.doStuff.before( {
                     name : "test1",
                     fn   : function( next, msg ) {
                         next( "Yo dawg..." + msg );
@@ -108,7 +183,7 @@
                     target  : obj.doStuff,
                     context : obj
                 } );
-                obj.doStuff.addStep( {
+                obj.doStuff.before( {
                     name : "test1",
                     fn   : function( next, msg ) {
                         next( "Yo dawg..." + this.name + " says '" + msg + "'");
@@ -144,7 +219,7 @@
                     target  : obj.doStuff,
                     context : obj
                 } );
-                obj.doStuff.addStep(function( next, msg ) {
+                obj.doStuff.before(function( next, msg ) {
                     setTimeout(function() {
                         next( "Yo dawg..." + msg + "'");
                     }, 0);

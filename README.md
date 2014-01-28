@@ -23,7 +23,7 @@ obj.doStuff(1);
 // Conduit's pipeline steps are functions that take a "next" continuation callback
 // as the first argument. After that you can have 0-n arguments - whatever your
 // original target method signature should be
-obj.doStuff.addStep(function(next, someValue) {
+obj.doStuff.before(function(next, someValue) {
     console.log("Pre-invocation step. We can see the value is: " + someValue);
     next(someValue);
 });
@@ -37,7 +37,7 @@ obj.doStuff(1);
 ###Add a post-invocation step to the pipeline:
 
 ```javascript
-obj.doStuff.addStep(function(next, someValue) {
+obj.doStuff.after(function(next, someValue) {
     console.log("Post-invocation step. We can see the value is: " + someValue);
     next(someValue);
 }, { phase: "post" });
@@ -52,7 +52,7 @@ obj.doStuff(1);
 ###Adding a pre-invocation step before other pre-invocation steps:
 
 ```javascript
-obj.doStuff.addStep(function(next, someValue) {
+obj.doStuff.before(function(next, someValue) {
     console.log("Another Pre-invocation step. This should execute first...");
     next(someValue);
 }, { prepend: true });
@@ -68,7 +68,7 @@ obj.doStuff(1)
 ###Adding a post-invocation step before other post-invocation steps:
 
 ```javascript
-obj.doStuff.addStep(function(next, someValue) {
+obj.doStuff.after(function(next, someValue) {
     console.log("Another Post-invocation step. This should execute before any other post-invocation steps...");
     next(someValue);
 }, { prepend: true, phase: "post" });
@@ -86,7 +86,7 @@ obj.doStuff(1)
 
 ```javascript
 var someFlag = false;
-obj.doStuff.addStep(function(next, someValue) {
+obj.doStuff.before(function(next, someValue) {
     console.log("Pre-invocation predicate. I will halt execution");
     if(someFlag) {
     	next(someValue);

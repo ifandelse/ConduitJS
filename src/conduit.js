@@ -52,14 +52,23 @@
         conduit.steps = function() {
             return _steps.all;
         };
-        conduit.addStep = function( strategy, options ) {
-            strategy = typeof strategy === "function" ? { fn: strategy } : strategy;
+        conduit.before = function(step, options) {
+            step =  typeof step === "function" ? { fn: step } : step;
             options = options || {};
-            var phase = options.phase || "pre";
             if(options.prepend) {
-                _steps[phase].unshift( strategy );
+                _steps.pre.unshift( step );
             } else {
-                _steps[phase].push( strategy );
+                _steps.pre.push( step );
+            }
+            _genPipeline();
+        };
+        conduit.after = function(step, options) {
+            step =  typeof step === "function" ? { fn: step } : step;
+            options = options || {};
+            if(options.prepend) {
+                _steps.post.unshift( step );
+            } else {
+                _steps.post.push( step );
             }
             _genPipeline();
         };
