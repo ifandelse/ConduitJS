@@ -144,5 +144,34 @@
                 } );
             } );
         } );
+        describe( "with asynchronous steps", function() {
+            var obj = {
+                name    : "Jimbabwe",
+                doStuff : function( msg, cb ) {
+                    cb( "Hi, " + this.name + " - " + msg );
+                }
+            };
+            var oldMethod;
+            before( function() {
+                oldMethod = obj.doStuff;
+                obj.doStuff = new Conduit( {
+                    target  : obj.doStuff,
+                    context : obj
+                } );
+                obj.doStuff.addStep(function( next, msg ) {
+                    setTimeout(function() {
+                        next( "Yo dawg..." + msg + "'");
+                    }, 0);
+                });
+            } );
+            it( "should return the expected value", function() {
+                it( "should return the expected value", function(done) {
+                    obj.doStuff( "here's your msg...", function( msg ) {
+                        expect( msg ).to.be( "Hi, Jimbabwe - Yo dawg...here's your msg..." );
+                        done();
+                    } );
+                } );
+            } );
+        });
     } );
 }());
