@@ -1,24 +1,14 @@
 {
-    "name": "postal.js",
-    "repo": "postaljs/postal.js",
-    "description": "Client-side messaging library",
-    "version": "0.8.11",
+    "name": "conduitjs",
+    "repo": "ifandelse/conduitjs",
+    "description": "Give any method a pipeline....",
+    "version": "0.0.2",
     "keywords": [
-        "pub/sub",
-        "pub",
-        "sub",
-        "messaging",
-        "message",
-        "bus",
-        "event",
-        "eventing",
-        "mediator",
-        "broker",
-        "envelope"
+        "pipeline",
+        "strategy",
+        "AOP"
     ],
-    "dependencies": {
-        "component/underscore": "*"
-    },
-    "scripts": ["lib/postal.min.js", "lib/postal.js"],
+    "dependencies": {},
+    "scripts": ["lib/conduitjs.min.js", "lib/conduitjs.js"],
     "license": "MIT"
 }
