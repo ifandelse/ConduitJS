@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" href="../bower/mocha/mocha.css" />
+</head>
+<body>
+<div id="mocha"></div>
+<script type="text/javascript" src="../bower/jquery/jquery.js"></script>
+<script type="text/javascript" src="../bower/expect/expect.js"></script>
+<script type="text/javascript" src="../bower/mocha/mocha.js"></script>
+<script type="text/javascript">
+    mocha.setup({ ui: 'bdd', timeout: 60000 });
+</script>
+<script type="text/javascript" src="../lib/conduit.js"></script>
+<script type="text/javascript" src="conduit.spec.js"></script>
+<script type="text/javascript">
+    mocha.run();
+</script>
+</body>
+</html>
+
+
