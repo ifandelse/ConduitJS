@@ -41,20 +41,27 @@
         var conduit = function() {
             var idx = 0;
             var retval;
+            var phase;
             var next = function next() {
                 var args = Array.prototype.slice.call(arguments, 0);
                 var thisIdx = idx;
                 var step;
+                var nextArgs;
                 idx += 1;
                 if (thisIdx < _steps.all.length) {
                     step = _steps.all[thisIdx];
+                    phase = (phase === "target") ? "after" : (step.isTarget) ? "target" : "before";
                     if (options.sync) {
-                        retval = step.fn.apply(step.context || _defaultContext, args);
-                        next.apply(this, [retval].concat(args.slice(1)));
+                        if (phase === "before") {
+                            nextArgs = step.fn.apply(step.context || _defaultContext, args);
+                            next.apply(this, nextArgs || args);
+                        } else {
+                            retval = step.fn.apply(step.context || _defaultContext, args);
+                            next.apply(this, [retval].concat(args));
+                        }
                     } else {
                         step.fn.apply(step.context || _defaultContext, [next].concat(args));
                     }
-
                 }
             };
             next.apply(this, arguments);
@@ -100,6 +107,7 @@
                 post: [],
                 all: []
             };
+            _genPipeline();
         };
         return conduit;
     };

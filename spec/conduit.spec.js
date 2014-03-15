@@ -39,8 +39,8 @@
                     });
                     obj.doStuff.before({
                         name: "test1",
-                        fn: function(next, msg) {
-                            next("Yo dawg..." + msg);
+                        fn: function(next, msg, cb) {
+                            next("Yo dawg..." + msg, cb);
                         }
                     });
                 });
@@ -51,10 +51,8 @@
                     expect(obj.doStuff.steps().length).to.be(2);
                 });
                 it("should return the expected value", function() {
-                    it("should return the expected value", function() {
-                        obj.doStuff("here's your msg...", function(msg) {
-                            expect(msg).to.be("Hi, Jimbabwe - Yo dawg...here's your msg...");
-                        });
+                    obj.doStuff("here's your msg...", function(msg) {
+                        expect(msg).to.be("Hi, Jimbabwe - Yo dawg...here's your msg...");
                     });
                 });
             });
@@ -159,7 +157,7 @@
                     expect(obj.doStuff).to.not.be(oldMethod);
                 });
                 it("should NOT show a strategy in the array", function() {
-                    expect(obj.doStuff.steps().length).to.be(0);
+                    expect(obj.doStuff.steps().length).to.be(1);
                 });
                 it("should return the expected value", function() {
                     it("should return the expected value", function() {
@@ -369,8 +367,8 @@
             describe("when clearing steps", function() {
                 var obj = {
                     name: "Jimbabwe",
-                    doStuff: function(msg, cb) {
-                        cb("Hi, " + this.name + " - " + msg);
+                    doStuff: function(msg) {
+                        return "Hi, " + this.name + " - " + msg;
                     }
                 };
                 var oldMethod;
@@ -383,7 +381,7 @@
                     obj.doStuff.before({
                         name: "test1",
                         fn: function(msg) {
-                            next("Yo dawg..." + msg);
+                            return "Yo dawg..." + msg;
                         }
                     });
                     obj.doStuff.clear();
@@ -392,12 +390,10 @@
                     expect(obj.doStuff).to.not.be(oldMethod);
                 });
                 it("should NOT show a strategy in the array", function() {
-                    expect(obj.doStuff.steps().length).to.be(0);
+                    expect(obj.doStuff.steps().length).to.be(1);
                 });
                 it("should return the expected value", function() {
-                    it("should return the expected value", function() {
-                        expect(obj.doStuff("here's your msg...")).to.be("Hi, Jimbabwe - here's your msg...");
-                    });
+                    expect(obj.doStuff("here's your msg...")).to.be("Hi, Jimbabwe - here's your msg...");
                 });
             });
             describe("when providing a strategy-specific context", function() {
@@ -420,7 +416,7 @@
                     obj.doStuff.before({
                         name: "test1",
                         fn: function(msg) {
-                            return "Yo dawg..." + this.name + " says '" + msg + "'";
+                            return ["Yo dawg..." + this.name + " says '" + msg + "'"];
                         },
                         context: objB
                     });
@@ -432,12 +428,10 @@
                     expect(obj.doStuff.steps().length).to.be(2);
                 });
                 it("should return the expected value", function() {
-                    it("should return the expected value", function() {
-                        expect(obj.doStuff("here's your msg...")).to.be("Hi, Jimbabwe - Yo dawg...Your mom says 'here's your msg...'");
-                    });
+                    expect(obj.doStuff("here's your msg...")).to.be("Hi, Jimbabwe - Yo dawg...Your mom says 'here's your msg...'");
                 });
             });
-            describe("When mutating the value in a before step", function() {
+            describe("When mutating the args in a before step", function() {
                 var obj = {
                     name: "Jimbabwe",
                     doStuff: function(msg) {
@@ -453,8 +447,8 @@
                     });
                     obj.doStuff.before({
                         name: "test1",
-                        fn: function(returnVal, msg) {
-                            return "CONDUIT SEZ: " + returnVal;
+                        fn: function(msg) {
+                            return ["CONDUIT SEZ: " + msg];
                         }
                     });
                 });
@@ -465,9 +459,7 @@
                     expect(obj.doStuff.steps().length).to.be(2);
                 });
                 it("should return the expected value", function() {
-                    it("should return the expected value", function() {
-                        expect(obj.doStuff("here's your msg...")).to.be("CONDUIT SEZ: Hi, Jimbabwe - here's your msg...");
-                    });
+                    expect(obj.doStuff("here's your msg...")).to.be("Hi, Jimbabwe - CONDUIT SEZ: here\'s your msg...");
                 });
             });
             describe("When mutating the value in an after step", function() {
@@ -498,9 +490,7 @@
                     expect(obj.doStuff.steps().length).to.be(2);
                 });
                 it("should return the expected value", function() {
-                    it("should return the expected value", function() {
-                        expect(obj.doStuff("here's your msg...")).to.be("CONDUIT SEZ: Hi, Jimbabwe - here's your msg...");
-                    });
+                    expect(obj.doStuff("here's your msg...")).to.be("CONDUIT SEZ: Hi, Jimbabwe - here's your msg...");
                 });
             });
             describe("When mutating the value in before and after steps", function() {
@@ -519,8 +509,8 @@
                     });
                     obj.doStuff.before({
                         name: "test1",
-                        fn: function(returnVal, msg) {
-                            return "CONDUIT SEZ BEFORE: " + returnVal;
+                        fn: function(msg) {
+                            return ["CONDUIT SEZ BEFORE: " + msg];
                         }
                     });
                     obj.doStuff.after({
@@ -537,9 +527,7 @@
                     expect(obj.doStuff.steps().length).to.be(3);
                 });
                 it("should return the expected value", function() {
-                    it("should return the expected value", function() {
-                        expect(obj.doStuff("here's your msg...")).to.be("CONDUIT SEZ BEFORE: Hi, Jimbabwe - here's your msg... CONDUIT SEZ AFTER");
-                    });
+                    expect(obj.doStuff("here's your msg...")).to.be("Hi, Jimbabwe - CONDUIT SEZ BEFORE: here\'s your msg... CONDUIT SEZ AFTER");
                 });
             });
         });
