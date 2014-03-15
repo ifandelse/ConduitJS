@@ -1,32 +1,36 @@
 /*global define, module */
-(function( root, factory ) {
-    if ( typeof module === "object" && module.exports ) {
+(function(root, factory) {
+    if (typeof module === "object" && module.exports) {
         // Node, or CommonJS-Like environments
         module.exports = factory();
-    } else if ( typeof define === "function" && define.amd ) {
+    } else if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module.
-        define( factory( root ) );
+        define(factory(root));
     } else {
         // Browser globals
-        root.Conduit = factory( root );
+        root.Conduit = factory(root);
     }
-}( this, function( global, undefined ) {
-    return function( options ) {
-        if ( typeof options.target !== "function" ) {
-            throw new Error( "You can only make functions into Conduits." );
+}(this, function(global, undefined) {
+    function Conduit(options) {
+        if (typeof options.target !== "function") {
+            throw new Error("You can only make functions into Conduits.");
         }
         var _steps = {
-            pre : options.pre  || [],
+            pre: options.pre || [],
             post: options.post || [],
-            all : []
+            all: []
         };
-        var _context = options.context;
+        var _defaultContext = options.context;
         var _targetStep = {
             isTarget: true,
-            context: _context,
-            fn: function(next) {
-                var args = Array.prototype.slice.call( arguments, 1 );
-                options.target.apply( _context, args);
+            fn: options.sync ?
+                function() {
+                    var args = Array.prototype.slice.call(arguments, 0);
+                    var result = options.target.apply(_defaultContext, args);
+                    return result;
+            } : function(next) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                args.splice(1, 1, options.target.apply(_defaultContext, args));
                 next.apply(this, args);
             }
         };
@@ -35,50 +39,77 @@
         };
         _genPipeline();
         var conduit = function() {
-            var idx = 0,
-                self = this;
+            var idx = 0;
+            var retval;
             var next = function next() {
-                var args = Array.prototype.slice.call( arguments, 0 );
+                var args = Array.prototype.slice.call(arguments, 0);
                 var thisIdx = idx;
                 var step;
                 idx += 1;
-                if (thisIdx < _steps.all.length ) {
+                if (thisIdx < _steps.all.length) {
                     step = _steps.all[thisIdx];
-                    step.fn.apply( step.context || _context, [next].concat( args ) );
+                    if (options.sync) {
+                        retval = step.fn.apply(step.context || _defaultContext, args);
+                        next.apply(this, [retval].concat(args.slice(1)));
+                    } else {
+                        step.fn.apply(step.context || _defaultContext, [next].concat(args));
+                    }
+
                 }
             };
-            next.apply( this, arguments );
+            next.apply(this, arguments);
+            return retval;
         };
         conduit.steps = function() {
             return _steps.all;
         };
-        conduit.before = function(step, options) {
-            step =  typeof step === "function" ? { fn: step } : step;
-            options = options || {};
-            if(options.prepend) {
-                _steps.pre.unshift( step );
+        conduit.context = function(ctx) {
+            if (arguments.length === 0) {
+                return _defaultContext;
             } else {
-                _steps.pre.push( step );
+                _defaultContext = ctx;
+            }
+        };
+        conduit.before = function(step, options) {
+            step = typeof step === "function" ? {
+                fn: step
+            } : step;
+            options = options || {};
+            if (options.prepend) {
+                _steps.pre.unshift(step);
+            } else {
+                _steps.pre.push(step);
             }
             _genPipeline();
         };
         conduit.after = function(step, options) {
-            step =  typeof step === "function" ? { fn: step } : step;
+            step = typeof step === "function" ? {
+                fn: step
+            } : step;
             options = options || {};
-            if(options.prepend) {
-                _steps.post.unshift( step );
+            if (options.prepend) {
+                _steps.post.unshift(step);
             } else {
-                _steps.post.push( step );
+                _steps.post.push(step);
             }
             _genPipeline();
         };
         conduit.clear = function() {
             _steps = {
-                pre : [],
+                pre: [],
                 post: [],
-                all : []
+                all: []
             };
         };
         return conduit;
     };
+    return {
+        Sync: function(options) {
+            options.sync = true;
+            return Conduit.call(this, options)
+        },
+        Async: function(options) {
+            return Conduit.call(this, options);
+        }
+    }
 }));
