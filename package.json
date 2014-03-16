@@ -1,25 +1,22 @@
 {
     "name": "conduitjs",
     "description": "Give any method a pre/post invocation pipeline....",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "homepage": "http://github.com/ifandelse/ConduitJS",
     "repository": {
         "type": "git",
         "url": "git://github.com/ifandelse/ConduitJS.git"
     },
     "author": "Jim Cowart (http://freshbrewedcode.com/jimcowart)",
-    "contributors": [
-        {
-            "name": "Jim Cowart",
-            "email": "WhyNotJustComment@OnMyBlog.com",
-            "url": "http://freshbrewedcode.com/jimcowart"
-        },
-        {
-            "name": "TJ VanToll",
-            "email": "WhyNotJustComment@OnMyBlog.com",
-            "url": "http://tjvantoll.com/"
-        }
-    ],
+    "contributors": [{
+        "name": "Jim Cowart",
+        "email": "WhyNotJustComment@OnMyBlog.com",
+        "url": "http://freshbrewedcode.com/jimcowart"
+    }, {
+        "name": "TJ VanToll",
+        "email": "WhyNotJustComment@OnMyBlog.com",
+        "url": "http://tjvantoll.com/"
+    }],
     "keywords": [
         "strategy",
         "pipeline",
