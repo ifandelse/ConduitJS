@@ -56,7 +56,7 @@
                             nextArgs = step.fn.apply(step.context || _defaultContext, args);
                             next.apply(this, nextArgs || args);
                         } else {
-                            retval = step.fn.apply(step.context || _defaultContext, args);
+                            retval = step.fn.apply(step.context || _defaultContext, args) || retval;
                             next.apply(this, [retval].concat(args));
                         }
                     } else {
