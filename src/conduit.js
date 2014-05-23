@@ -5,7 +5,7 @@
         module.exports = factory();
     } else if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module.
-        define(factory(root));
+        define([], factory(root));
     } else {
         // Browser globals
         root.Conduit = factory(root);
@@ -28,11 +28,11 @@
                     var args = Array.prototype.slice.call(arguments, 0);
                     var result = options.target.apply(_defaultContext, args);
                     return result;
-            } : function(next) {
-                var args = Array.prototype.slice.call(arguments, 1);
-                args.splice(1, 1, options.target.apply(_defaultContext, args));
-                next.apply(this, args);
-            }
+                } : function(next) {
+                    var args = Array.prototype.slice.call(arguments, 1);
+                    args.splice(1, 1, options.target.apply(_defaultContext, args));
+                    next.apply(this, args);
+                }
         };
         var _genPipeline = function() {
             _steps.all = _steps.pre.concat([_targetStep].concat(_steps.post));
@@ -110,14 +110,14 @@
             _genPipeline();
         };
         return conduit;
-    };
+    }
     return {
         Sync: function(options) {
             options.sync = true;
-            return Conduit.call(this, options)
+            return Conduit.call(this, options);
         },
         Async: function(options) {
             return Conduit.call(this, options);
         }
-    }
+    };
 }));
