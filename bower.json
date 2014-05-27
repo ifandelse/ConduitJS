@@ -1,6 +1,6 @@
 {
     "name": "conduitjs",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "Give any method a pipeline....",
     "homepage": "https://github.com/ifandelse/ConduitJS",
     "keywords": [

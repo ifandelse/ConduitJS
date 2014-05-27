@@ -21,16 +21,17 @@
             all: []
         };
         var _defaultContext = options.context;
+        var _target = options.target;
         var _targetStep = {
             isTarget: true,
             fn: options.sync ?
                 function() {
                     var args = Array.prototype.slice.call(arguments, 0);
-                    var result = options.target.apply(_defaultContext, args);
+                    var result = _target.apply(_defaultContext, args);
                     return result;
             } : function(next) {
                 var args = Array.prototype.slice.call(arguments, 1);
-                args.splice(1, 1, options.target.apply(_defaultContext, args));
+                args.splice(1, 1, _target.apply(_defaultContext, args));
                 next.apply(this, args);
             }
         };
@@ -108,6 +109,9 @@
                 all: []
             };
             _genPipeline();
+        };
+        conduit.setTarget = function(fn) {
+            _target = fn;
         };
         return conduit;
     };
