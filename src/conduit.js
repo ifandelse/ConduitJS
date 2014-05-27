@@ -110,8 +110,11 @@
             };
             _genPipeline();
         };
-        conduit.setTarget = function(fn) {
-            _target = fn;
+        conduit.target = function (fn) {
+            if(fn) {
+                _target = fn;
+            }
+            return _target;
         };
         return conduit;
     };

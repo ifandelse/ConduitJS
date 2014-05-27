@@ -235,6 +235,43 @@
                     });
                 });
             });
+            describe("when replacing the target with a new one", function() {
+                var obj = {
+                    name: "Jimbabwe",
+                    doStuff: function(msg, cb) {
+                        cb("Hi, " + this.name + " - " + msg);
+                    }
+                };
+                var doStuffNew = function(msg, cb) {
+                    cb("NEW: Hi, " + this.name + " - " + msg);
+                };
+                var oldMethod;
+                before(function() {
+                    oldMethod = obj.doStuff;
+                    obj.doStuff = new Conduit.Async({
+                        target: obj.doStuff,
+                        context: obj
+                    });
+                    obj.doStuff.before({
+                        name: "test1",
+                        fn: function(next, msg, cb) {
+                            next("Yo dawg..." + this.name + " says '" + msg + "'", cb);
+                        }
+                    });
+                    obj.doStuff.target(doStuffNew);
+                });
+                it("should replace the method", function() {
+                    expect(obj.doStuff).to.not.be(oldMethod);
+                });
+                it("should show a strategy in the steps array along with target", function() {
+                    expect(obj.doStuff.steps().length).to.be(2);
+                });
+                it("should return the expected value", function() {
+                    obj.doStuff("here's your msg...", function(msg) {
+                        expect(msg).to.be("NEW: Hi, Jimbabwe - Yo dawg...Jimbabwe says 'here's your msg...'");
+                    });
+                });
+            });
         });
         describe("With a Sync-only pipeline", function() {
             describe("with NO steps in use", function() {
@@ -528,6 +565,32 @@
                 });
                 it("should return the expected value", function() {
                     expect(obj.doStuff("here's your msg...")).to.be("Hi, Jimbabwe - CONDUIT SEZ BEFORE: here\'s your msg... CONDUIT SEZ AFTER");
+                });
+            });
+            describe("when replacing the target with a new one", function() {
+                var obj = {
+                    name: "Jimbabwe",
+                    doStuff: function(msg) {
+                        return "Hi, " + this.name + " - " + msg;
+                    }
+                };
+                var doStuffNew = function(msg) {
+                    return "NEW: Hi, " + this.name + " - " + msg;
+                };
+                var oldMethod;
+                before(function() {
+                    oldMethod = obj.doStuff;
+                    obj.doStuff = new Conduit.Sync({
+                        target: obj.doStuff,
+                        context: obj
+                    });
+                    obj.doStuff.target(doStuffNew);
+                });
+                it("should replace the method", function() {
+                    expect(obj.doStuff).to.not.be(oldMethod);
+                });
+                it("should return the expected value", function() {
+                    expect(obj.doStuff("here's your msg...")).to.be("NEW: Hi, Jimbabwe - here's your msg...");
                 });
             });
         });
