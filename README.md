@@ -1,4 +1,4 @@
-#ConduitJS v0.3.2
+#ConduitJS v0.3.3
 
 ConduitJS can be used to *intercept* your methods and give them a pre- and post-invocation pipeline. You can think of it as targeted [AOP](http://en.wikipedia.org/wiki/Aspect-oriented_programming) for JavaScript methods or the [Decorator](http://en.wikipedia.org/wiki/Decorator_pattern) pattern used to target methods specifically. Need the ability to execute behavior just before or after a  method is invoked? Want to apply a predicate that determines if the method should actually fire? You can use ConduitJS to make that happen.
 

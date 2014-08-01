@@ -1,7 +1,7 @@
 {
     "name": "conduitjs",
     "description": "Give any method a pre/post invocation pipeline....",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "homepage": "http://github.com/ifandelse/ConduitJS",
     "repository": {
         "type": "git",
@@ -16,6 +16,9 @@
         "name": "TJ VanToll",
         "email": "WhyNotJustComment@OnMyBlog.com",
         "url": "http://tjvantoll.com/"
+    }, {
+        "name": "Jonathan Newman",
+        "url": "https://github.com/reflectiveSingleton"
     }],
     "keywords": [
         "strategy",

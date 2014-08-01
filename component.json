@@ -2,7 +2,7 @@
     "name": "conduitjs",
     "repo": "ifandelse/conduitjs",
     "description": "Give any method a pipeline....",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "keywords": [
         "strategy",
         "pipeline",
