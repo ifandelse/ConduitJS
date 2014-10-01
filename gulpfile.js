@@ -29,10 +29,11 @@ gulp.task("combine", function() {
         .pipe(fileImports())
         .pipe(hintNot())
         .pipe(beautify({ indentSize: 4, preserveNewlines: false }))
+        .pipe(rename("conduitjs.js"))
         .pipe(gulp.dest("./lib/"))
         .pipe(uglify({ compress: { negate_iife: false }}))
         .pipe(header(banner, { pkg : pkg }))
-        .pipe(rename("conduit.min.js"))
+        .pipe(rename("conduitjs.min.js"))
         .pipe(gulp.dest("./lib/"));
 });
 
@@ -41,7 +42,7 @@ gulp.task("default", function() {
 });
 
 gulp.task("report", function () {
-    gulp.src("./lib/conduit.js")
+    gulp.src("./lib/conduitjs.js")
         .pipe(plato("report"));
 });
 
