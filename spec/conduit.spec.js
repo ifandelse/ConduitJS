@@ -1,6 +1,6 @@
 /*global describe, it, after, before, expect */
 (function() {
-    var Conduit = typeof window === "undefined" ? require("../lib/conduit.js") : window.Conduit;
+    var Conduit = typeof window === "undefined" ? require("../lib/conduitjs.js") : window.Conduit;
     var expect = typeof window === "undefined" ? require("expect.js") : window.expect;
     describe("ConduitJS", function() {
         describe("With an Async-Capable Pipeline", function() {
