@@ -12,6 +12,6 @@
         "step"
     ],
     "dependencies": {},
-    "scripts": ["lib/conduitjs.min.js", "lib/conduitjs.js"],
+    "scripts": ["lib/conduit.min.js", "lib/conduit.js"],
     "license": "MIT"
 }
