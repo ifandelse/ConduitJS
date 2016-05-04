@@ -56,10 +56,7 @@
         "open": "~0.0.4",
         "expect.js": "~0.2.0"
     },
-    "license": {
-        "type": "MIT",
-        "url": "http://www.opensource.org/licenses/mit-license.php"
-    },
+    "license": "MIT",
     "scripts": {
         "test": "mocha ./spec/*.js",
         "build": "gulp",
